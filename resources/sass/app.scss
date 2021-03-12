@@ -1,0 +1,13 @@
+@import '~alertifyjs/build/css/alertify.css';
+
+@import '~filepond/dist/filepond.min.css';
+
+.alertify-notifier .ajs-message {
+  width: 550px !important;
+}
+
+.alertify-notifier.ajs-right .ajs-message.ajs-visible {
+  right: 580px !important;
+  padding: 0 !important;
+}
+
