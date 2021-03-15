@@ -1,6 +1,9 @@
 @import '~alertifyjs/build/css/alertify.css';
 
 @import '~filepond/dist/filepond.min.css';
+@import '~filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+@import '~filepond-plugin-file-poster/dist/filepond-plugin-file-poster.css';
+@import '~swiper/swiper-bundle.css';
 
 .alertify-notifier .ajs-message {
   width: 550px !important;

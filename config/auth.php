@@ -51,6 +51,12 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'petugas-api' => [
+            'driver' => 'token',
+            'provider' => 'petugas',
+            'hash' => false
+        ]
     ],
 
     /*

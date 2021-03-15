@@ -23,5 +23,19 @@ Route::get('fetch-user', function () {
     return Masyarakat::all();
 });
 
-Route::middleware('auth:api')->post('/lelang/{id}/tawaran', 'LelangController@offer');
+Route::group(['as' => 'api::'], function () {
+    Route::group(['middleware' => 'auth:petugas-api'], function () {
+        Route::post('/barang/{id}/photo', 'admin\BarangController@photoStore')->name('photo.store');
+    });
+    Route::get('/barang/{id}/photos', 'admin\BarangController@photos')->name('photos');
+    Route::get('/images', 'admin\BarangController@getPhoto')->name('photo.get.thumbnail');
+    Route::post('/images/delete', 'admin\BarangController@deletePhoto')->name('photo.delete');
+});
+
+
+
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::post('/lelang/{id}/tawaran', 'LelangController@offer');
+});
+
 Route::get('/lelang/{id}', 'LelangController@showApi');

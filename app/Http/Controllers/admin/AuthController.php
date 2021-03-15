@@ -26,6 +26,8 @@ class AuthController extends Controller
 
         Auth::guard('petugas')->setUser($petugas);
 
+        setcookie('API_TOKEN', $petugas->api_token);
+
         return redirect()->route('admin::home');
     }
 

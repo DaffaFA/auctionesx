@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Events\NewItem;
 use App\Http\Controllers\Controller;
 use App\Models\Barang;
+use App\Models\Photo;
 use Illuminate\Http\Request;
+use Image;
+use Storage;
 
 class BarangController extends Controller
 {
@@ -55,7 +59,7 @@ class BarangController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.barang.edit', ['barang' => Barang::findOrFail($id)]);
+        return view('admin.barang.edit', ['barang' => Barang::findOrFail($id), 'images' => $this->photos($id)]);
     }
 
     /**
@@ -73,7 +77,7 @@ class BarangController extends Controller
             'deskripsi_barang' =>  ['required', 'max:100']
         ]);
 
-        Barang::findOrFail($id)->update($request->all());
+        Barang::findOrFail($id)->update($request->except(['filepond']));
 
         return redirect()->route('admin::barang.index');
     }
@@ -89,5 +93,57 @@ class BarangController extends Controller
         Barang::findOrFail($id)->delete();
 
         return redirect()->route('admin::barang.index');
+    }
+
+    public function photoStore(Request $request, $id)
+    {
+        $barang = Barang::findOrFail($id);
+
+        $request->validate([
+            'filepond' => ['mimes:jpg,png,jpeg'],
+        ]);
+
+        $path = $request->file('filepond')->storePublicly('public/images');
+
+        $barang->photos()->create([
+            'path' => $path
+        ]);
+
+        return response(['path' => $path]);
+    }
+
+    public function photos($id)
+    {
+        $barang = Barang::findOrFail($id);
+
+        $arr = [];
+
+        foreach ($barang->photos as $photo) {
+            $exploded = explode('/', $photo->path);
+            $arr[] = [
+                'source' => $photo->path,
+                'options' => [
+                    'type' => 'local',
+                    'file' => [
+                        'name' => end($exploded),
+                        'size' => Storage::size($photo->path),
+                        'type' => Storage::mimeType($photo->path)
+                    ],
+                    'metadata' => [
+                        'poster' => Storage::url($photo->path)
+                    ]
+                ]
+            ];
+        }
+
+        return $arr;
+    }
+
+    public function deletePhoto(Request $request)
+    {
+        Photo::where('path', $request->image)->get()->first()->delete();
+        Storage::delete($request->image);
+        
+        return response(['message' => 'file deleted']);
     }
 }

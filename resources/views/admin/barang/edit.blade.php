@@ -85,9 +85,36 @@
 
 @push('js')
     <script>
-      window.filepond.setOptions({
-        server: 'api/barang/{{ $barang->id_barang }}/photo'
+      document.addEventListener('DOMContentLoaded', function () {
+        window.filepond.create(document.getElementById('filepond'), {
+          server: {
+            process: {
+              url: '{{ route('api::photo.store', $barang->id_barang) }}',
+              withCredentials: true,
+              headers: {
+                Authorization: `Bearer {{ auth()->user()->api_token }}`
+              },
+              method: 'POST'
+            },
+            load: {
+              url: '{{ route('api::photo.get.thumbnail') }}/?photo='
+            },
+            revert: null,
+            restore: null,
+            remove: async (source, load, error) => {
+                await axios.post('{{ route('api::photo.delete') }}', {
+                  image: source
+                });
+                console.log('remove method', source);                
+                load();
+            }
+          },
+          allowMultiple: true,
+          files: @json($images),
+          acceptedFileTypes: ['image/jpeg', 'image/jpg', 'image/png'],
+        });
       });
-      window.filepond.create(document.getElementById('filepond'));
+
+      console.log(@json($images));
     </script>
 @endpush

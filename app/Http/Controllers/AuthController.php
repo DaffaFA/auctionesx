@@ -6,6 +6,7 @@ use App\Models\Masyarakat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -25,6 +26,7 @@ class AuthController extends Controller
 
         $data = $request->except('_token', 'password_confirmation');
         $data['password'] = bcrypt($data['password']);
+        $data['api_token'] = Str::random(60);
 
         $user = Masyarakat::create($data);
 

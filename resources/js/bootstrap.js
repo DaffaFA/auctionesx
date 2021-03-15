@@ -37,5 +37,27 @@ window.Echo = new Echo({
 window.alertify = require('alertifyjs');
 
 import * as filepond from 'filepond';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import FilePondPluginFilePoster from 'filepond-plugin-file-poster';
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+
 
 window.filepond = filepond;
+
+window.filepond.registerPlugin(FilePondPluginImagePreview);
+window.filepond.registerPlugin(FilePondPluginFileValidateType);
+FilePondPluginFilePoster.filePosterHeight = '200px'
+window.filepond.registerPlugin(FilePondPluginFilePoster);
+
+import Cookies from 'js-cookie';
+
+window.Cookies = Cookies;
+
+// core version + navigation, pagination modules:
+import SwiperCore, { Navigation, Pagination, Swiper, Thumbs } from 'swiper/core';
+
+// configure Swiper to use modules
+SwiperCore.use([Navigation, Pagination, Thumbs]);
+
+// init Swiper:
+window.Swiper = Swiper;
