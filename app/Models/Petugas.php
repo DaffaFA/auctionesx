@@ -29,6 +29,10 @@ class Petugas extends Authenticatable
         'password',
     ];
 
+    protected $casts = [
+        'created_at' => 'date:F j, Y. g:i a'
+    ];
+
     /**
      * Change email column to username
      * 

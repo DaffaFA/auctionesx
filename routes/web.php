@@ -32,10 +32,10 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:petugas', 'as' => 'admi
 	Route::get('/home', 'HomeController@index')->name('home');
 	Route::resource('barang', 'admin\BarangController')->except('show');
 	Route::resource('lelang', 'admin\LelangController')->except('edit');
+	Route::resource('user', 'admin\UserController');
 });
 
 Route::group(['middleware' => 'auth:petugas'], function () {
-	Route::resource('user', 'UserController', ['except' => ['show']]);
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::get('icons', function () {

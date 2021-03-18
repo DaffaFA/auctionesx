@@ -16,7 +16,7 @@ class CreateMasyarakatsTable extends Migration
         Schema::create('tb_masyarakat', function (Blueprint $table) {
             $table->increments('id_user');
             $table->string('nama_lengkap', 25);
-            $table->string('username', 25);
+            $table->string('username', 25)->unique();
             $table->string('password');
             $table->rememberToken();
             $table->string('telp', 25);

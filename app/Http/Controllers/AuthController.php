@@ -19,7 +19,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'nama_lengkap'  =>  ['required', 'string', 'max:25'],
-            'username'  =>  ['required', 'string', 'max:25'],
+            'username'  =>  ['required', 'string', 'max:25', 'unique:tb_masyarakat'],
             'password'  =>  ['required', 'string', 'max:25', 'confirmed'],
             'telp'  =>  ['required', 'numeric', 'digits_between:10,15']
         ]);
