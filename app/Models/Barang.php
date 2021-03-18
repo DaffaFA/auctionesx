@@ -18,7 +18,7 @@ class Barang extends Model
 
     public function lelang()
     {
-        return $this->belongsTo(Barang::class, 'id_barang');
+        return $this->belongsTo(Lelang::class, 'id_barang');
     }
 
     public function penawaran()

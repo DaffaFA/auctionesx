@@ -160,9 +160,6 @@ const AuctionTable = ({ auctionId }) => {
     []
   );
 
-  if (!loading && lelang?.penawaran.length == 0)
-    return <div className="p-5">Belum ada penawaran</div>;
-
   return (
     <div className="card shadow">
       <div className="card-header border-0">

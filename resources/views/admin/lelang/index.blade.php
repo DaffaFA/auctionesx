@@ -28,7 +28,7 @@
                         </thead>
                         <tbody>
                             @foreach ($lelangs as $lelang)
-                            <tr onclick="redirectToEdit('{{ route('admin::lelang.show', $lelang->id_barang) }}')" style="cursor: pointer">
+                            <tr onclick="redirectToEdit('{{ route('admin::lelang.show', $lelang->id_lelang) }}')" style="cursor: pointer">
                                 <th>{{ $lelang->barang->nama_barang }}</th>
                                 <th>
                                     @if(!empty($lelang->id_user))                                        

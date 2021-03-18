@@ -5879,10 +5879,6 @@ var AuctionTable = function AuctionTable(_ref2) {
       accessor: "created_at"
     }];
   }, []);
-  if (!loading && (lelang === null || lelang === void 0 ? void 0 : lelang.penawaran.length) == 0) return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-    className: "p-5",
-    children: "Belum ada penawaran"
-  });
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
     className: "card shadow",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {

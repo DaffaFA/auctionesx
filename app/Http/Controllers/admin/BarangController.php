@@ -40,13 +40,16 @@ class BarangController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'nama_barang' =>  ['required', 'between:1,25'],
             'harga_awal' =>  ['required', 'digits_between:1,20'],
             'deskripsi_barang' =>  ['required', 'max:100']
         ]);
 
-        Barang::create($request->all());
+        $barang = Barang::create($request->except(['exit']));
+
+        if ($request->exit != '1' ) return redirect()->route('admin::barang.edit', $barang->id_barang);
 
         return redirect()->route('admin::barang.index');
     }

@@ -16,7 +16,7 @@ class LelangController extends Controller
      */
     public function index()
     {
-        return view('admin.lelang.index', ['lelangs' => Lelang::with('barang')->get()]);
+        return view('admin.lelang.index', ['lelangs' => Lelang::all()]);
     }
 
     /**
