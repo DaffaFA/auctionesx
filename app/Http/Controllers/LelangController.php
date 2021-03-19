@@ -107,6 +107,13 @@ class LelangController extends Controller
             'id_barang' =>  $lelang->barang->id_barang,
             'penawaran_harga' => $request->penawaran_harga,
         ]);
+
+        $bid = $lelang->penawaran()->orderBy('penawaran_harga', 'desc')->first();
+
+        $lelang->update([
+            'id_user'       =>  $request->user()->id_user,
+            'harga_akhir'   =>  $request->penawaran_harga
+        ]);
         
         broadcast(new NewOffer($lelang));
     }

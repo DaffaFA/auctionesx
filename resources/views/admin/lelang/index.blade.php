@@ -24,6 +24,8 @@
                             <tr>
                                 <th>Nama</th>
                                 <th>Status</th>
+                                <th>Tawaran saat ini</th>
+                                <th>Nama User</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -31,12 +33,7 @@
                             <tr onclick="redirectToEdit('{{ route('admin::lelang.show', $lelang->id_lelang) }}')" style="cursor: pointer">
                                 <th>{{ $lelang->barang->nama_barang }}</th>
                                 <th>
-                                    @if(!empty($lelang->id_user))                                        
-                                        <span class="badge badge-dot mr-4">
-                                            <i class="bg-success"></i>
-                                            <span class="status">Done</span>
-                                        </span>
-                                    @elseif($lelang->status == 'dibuka')
+                                    @if($lelang->status == 'dibuka')
                                         <span class="badge badge-dot mr-4">
                                             <i class="bg-info"></i>
                                             <span class="status">Open</span>
@@ -48,6 +45,8 @@
                                         </span>
                                     @endif
                                 </th>
+                                <th>{{ $lelang->harga_akhir }}</th>
+                                <th>{{ $lelang->user?->nama_lengkap }}</th>
                             </tr>
                             @endforeach
                         </tbody>
