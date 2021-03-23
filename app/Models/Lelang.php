@@ -35,4 +35,9 @@ class Lelang extends Model
     {
         return $this->hasMany(Penawaran::class, 'id_lelang');
     }
+
+    public function invoice()
+    {
+        return $this->hasOne(Invoice::class, 'id_lelang');
+    }
 }

@@ -32,6 +32,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth:petugas', 'as' => 'admi
 	Route::get('/home', 'HomeController@index')->name('home');
 	Route::resource('barang', 'admin\BarangController')->except('show');
 	Route::resource('lelang', 'admin\LelangController')->except('edit');
+	Route::patch('/lelang/{id}/tutup', 'admin\LelangController@close')->name('lelang.close');
 	Route::resource('user', 'admin\UserController');
 });
 
@@ -60,3 +61,7 @@ Route::group(['middleware' => 'guest:petugas,masyarakat'], function () {
 });
 
 Route::resource('lelang', 'LelangController');
+
+Route::group(['middleware' => 'auth:masyarakat'], function () {
+	Route::resource('order', 'OrdersController');
+});

@@ -101,7 +101,7 @@ class LelangController extends Controller
     public function offer(Request $request, $id)
     {
         $lelang = Lelang::findOrFail($id);
-        
+
         $lelang->penawaran()->create([
             'id_user'   =>  $request->user()->id_user,
             'id_barang' =>  $lelang->barang->id_barang,
@@ -111,10 +111,10 @@ class LelangController extends Controller
         $bid = $lelang->penawaran()->orderBy('penawaran_harga', 'desc')->first();
 
         $lelang->update([
-            'id_user'       =>  $request->user()->id_user,
-            'harga_akhir'   =>  $request->penawaran_harga
+            'id_user'       =>  $bid->id_user,
+            'harga_akhir'   =>  $bid->penawaran_harga
         ]);
-        
+
         broadcast(new NewOffer($lelang));
     }
 }

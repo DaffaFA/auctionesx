@@ -5660,6 +5660,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 
+
 var Table = function Table(_ref) {
   var columns = _ref.columns,
       data = _ref.data,
@@ -5798,8 +5799,82 @@ var Table = function Table(_ref) {
   });
 };
 
-var AuctionTable = function AuctionTable(_ref2) {
-  var auctionId = _ref2.auctionId;
+var Modal = function Modal(_ref2) {
+  var closeLink = _ref2.closeLink;
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+    className: "modal fade",
+    id: "modal-notification",
+    tabIndex: "-1",
+    role: "dialog",
+    "aria-labelledby": "modal-notification",
+    "aria-hidden": "true",
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+      className: "modal-dialog modal-danger modal-dialog-centered modal-",
+      role: "document",
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        className: "modal-content bg-gradient-danger",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: "modal-header",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h6", {
+            className: "modal-title",
+            id: "modal-title-notification",
+            children: "Penutupan Lelang !"
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+            type: "button",
+            className: "close",
+            "data-dismiss": "modal",
+            "aria-label": "Close",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+              "aria-hidden": "true",
+              children: "\xD7"
+            })
+          })]
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+          className: "modal-body",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+            className: "py-3 text-center",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
+              className: "fas fa-gavel fa-3x"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("h4", {
+              className: "heading mt-4",
+              children: "Anda yakin ?"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("p", {
+              children: "Lelang akan ditutup dan menentukan pemenang. Operasi ini tidak bisa dikembalikan."
+            })]
+          })
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+          className: "modal-footer",
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("form", {
+            action: closeLink,
+            method: "POST",
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+              type: "hidden",
+              name: "_token",
+              value: document.querySelector('meta[name="csrf_token"]').getAttribute("content")
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("input", {
+              type: "hidden",
+              name: "_method",
+              value: "PATCH"
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+              type: "submit ",
+              className: "btn btn-white",
+              children: "MENGERTI"
+            })]
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("button", {
+            type: "button",
+            className: "btn btn-link text-white ml-auto",
+            "data-dismiss": "modal",
+            children: "Tutup dialog ini"
+          })]
+        })]
+      })
+    })
+  });
+};
+
+var AuctionTable = function AuctionTable(_ref3) {
+  var auctionId = _ref3.auctionId,
+      closeLink = _ref3.closeLink;
 
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(),
       _useState2 = _slicedToArray(_useState, 2),
@@ -5817,7 +5892,7 @@ var AuctionTable = function AuctionTable(_ref2) {
       setUsers = _useState6[1];
 
   var fetchLelang = /*#__PURE__*/function () {
-    var _ref3 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       var _yield$axios$all, _yield$axios$all2, lelangData, usersData;
 
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
@@ -5856,15 +5931,15 @@ var AuctionTable = function AuctionTable(_ref2) {
     }));
 
     return function fetchLelang() {
-      return _ref3.apply(this, arguments);
+      return _ref4.apply(this, arguments);
     };
   }();
 
-  (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(function () {
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
     fetchLelang();
     window.Echo.channel("lelang.".concat(auctionId)).listen("NewOffer", function (e) {
       setLelang(e);
-      window.alertify.notify("<div class=\"alert alert-default alert-dismissible fade show\" role=\"alert\">\n      <span class=\"alert-inner--icon\"><i class=\"ni ni-bell-55\"></i></span>\n      <span class=\"alert-inner--text\"><strong>Tawaran Baru !</strong> Seseorang telah membuat penawaran baru !</span>\n      <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n          <span aria-hidden=\"true\">&times;</span>\n      </button>\n  </div>", 'warning', 1000);
+      window.alertify.notify("<div className=\"alert alert-default alert-dismissible fade show\" role=\"alert\">\n      <span className=\"alert-inner--icon\"><i className=\"ni ni-bell-55\"></i></span>\n      <span className=\"alert-inner--text\"><strong>Tawaran Baru !</strong> Seseorang telah membuat penawaran baru !</span>\n      <button type=\"button\" className=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n          <span aria-hidden=\"true\">&times;</span>\n      </button>\n  </div>", "warning", 1000);
     });
   }, []);
   var columns = (0,react__WEBPACK_IMPORTED_MODULE_1__.useMemo)(function () {
@@ -5883,9 +5958,36 @@ var AuctionTable = function AuctionTable(_ref2) {
     className: "card shadow",
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
       className: "card-header border-0",
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h3", {
-        className: "mb-0",
-        children: ["Lelang ", lelang === null || lelang === void 0 ? void 0 : lelang.barang.nama_barang]
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
+        className: "row",
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+          className: "col-sm-6",
+          children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("h3", {
+            className: "mb-0",
+            children: ["Lelang ", lelang === null || lelang === void 0 ? void 0 : lelang.barang.nama_barang]
+          })
+        }), (lelang === null || lelang === void 0 ? void 0 : lelang.status) == "dibuka" && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(Modal, {
+            closeLink: closeLink
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
+            className: "col-sm-6 text-right",
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("button", {
+              className: "btn btn-icon btn-secondary",
+              type: "button",
+              "data-toggle": "modal",
+              "data-target": "#modal-notification",
+              children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                className: "btn-inner--icon",
+                children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("i", {
+                  className: "fas fa-gavel"
+                })
+              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("span", {
+                className: "btn-inner--text",
+                children: "Tutup"
+              })]
+            })
+          })]
+        })]
       })
     }), !loading && (lelang === null || lelang === void 0 ? void 0 : lelang.penawaran.length) > 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(Table, {
       columns: columns,
@@ -5902,8 +6004,10 @@ var AuctionTable = function AuctionTable(_ref2) {
 
 if (document.getElementById("auction-table")) {
   var auctionId = document.getElementById("auction-table").getAttribute("data-auction");
+  var closeLink = document.getElementById("auction-table").getAttribute("data-close");
   react_dom__WEBPACK_IMPORTED_MODULE_2__.render( /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(AuctionTable, {
-    auctionId: auctionId
+    auctionId: auctionId,
+    closeLink: closeLink
   }), document.getElementById("auction-table"));
 }
 

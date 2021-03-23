@@ -20,7 +20,7 @@ namespace App\Models{
  * @property int $harga_awal
  * @property string $deskripsi_barang
  * @property \Illuminate\Support\Carbon $updated_at
- * @property-read Barang $lelang
+ * @property-read \App\Models\Lelang $lelang
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Penawaran[] $penawaran
  * @property-read int|null $penawaran_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Photo[] $photos
@@ -40,6 +40,32 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Invoice
+ *
+ * @property int $id
+ * @property string $number
+ * @property int $id_lelang
+ * @property mixed $due_date
+ * @property int $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Lelang $lelang
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereDueDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereIdLelang($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereNumber($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Invoice whereUpdatedAt($value)
+ */
+	class Invoice extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Lelang
  *
  * @property int $id_lelang
@@ -51,6 +77,7 @@ namespace App\Models{
  * @property string $status
  * @property \Illuminate\Support\Carbon $updated_at
  * @property-read \App\Models\Barang|null $barang
+ * @property-read \App\Models\Invoice|null $invoice
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Penawaran[] $penawaran
  * @property-read int|null $penawaran_count
  * @property-read \App\Models\Petugas $petugas
@@ -162,9 +189,10 @@ namespace App\Models{
  * @property string $nama_petugas
  * @property string $username
  * @property string $password
+ * @property string|null $api_token
  * @property string|null $remember_token
  * @property int $id_level
- * @property \Illuminate\Support\Carbon|null $created_at
+ * @property mixed|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Lelang[] $lelangs
  * @property-read int|null $lelangs_count
@@ -174,6 +202,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|Petugas newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Petugas newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Petugas query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Petugas whereApiToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Petugas whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Petugas whereIdLevel($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Petugas whereIdPetugas($value)

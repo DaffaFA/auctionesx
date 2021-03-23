@@ -1,15 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Barang;
-use App\Models\Lelang;
-use Faker\Factory;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use PDF;
 
-class LelangController extends Controller
+class OrdersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,8 +14,9 @@ class LelangController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        return view('admin.lelang.index', ['lelangs' => Lelang::all()]);
+    {   
+        // $orders = auth()?->user()->lelangs;
+        return view('pages.order.index');
     }
 
     /**
@@ -28,7 +26,7 @@ class LelangController extends Controller
      */
     public function create()
     {
-        return view('admin.lelang.create', ['barangs' => Barang::all()]);
+        // 
     }
 
     /**
@@ -39,11 +37,7 @@ class LelangController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->all();
-        $data['status'] = $data['status'] == 'on' ? 'dibuka' : 'ditutup';
-        $request->user()->lelangs()->create($data);
-
-        return redirect()->route('admin::lelang.index');
+        //
     }
 
     /**
@@ -54,7 +48,7 @@ class LelangController extends Controller
      */
     public function show($id)
     {
-        return view('admin.lelang.show', ['lelang' => Lelang::findOrFail($id)]);
+        return PDF::loadView('export.invoice', ['invoice' => Invoice::findOrFail($id)])->setPaper('F4')->download('invoice.pdf');
     }
 
     /**
@@ -89,18 +83,5 @@ class LelangController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function close($id)
-    {
-        $lelang = Lelang::findOrFail($id);
-        
-        $lelang->update(['status' => 'ditutup']);
-        $lelang->invoice()->create([
-            'number'    =>  Factory::create('id_ID')->uuid,
-            'due_date'  =>  now()->addDay()
-        ]);
-
-        return redirect()->route('admin::lelang.show', $id);
     }
 }

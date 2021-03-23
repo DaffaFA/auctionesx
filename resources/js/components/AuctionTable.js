@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ReactDOM from "react-dom";
 import { usePagination, useTable } from "react-table";
 
@@ -106,7 +106,73 @@ const Table = ({ columns, data, users }) => {
   );
 };
 
-const AuctionTable = ({ auctionId }) => {
+const Modal = ({ closeLink }) => (
+  <div
+    className="modal fade"
+    id="modal-notification"
+    tabIndex="-1"
+    role="dialog"
+    aria-labelledby="modal-notification"
+    aria-hidden="true"
+  >
+    <div
+      className="modal-dialog modal-danger modal-dialog-centered modal-"
+      role="document"
+    >
+      <div className="modal-content bg-gradient-danger">
+        <div className="modal-header">
+          <h6 className="modal-title" id="modal-title-notification">
+            Penutupan Lelang !
+          </h6>
+          <button
+            type="button"
+            className="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+
+        <div className="modal-body">
+          <div className="py-3 text-center">
+            <i className="fas fa-gavel fa-3x"></i>
+            <h4 className="heading mt-4">Anda yakin ?</h4>
+            <p>
+              Lelang akan ditutup dan menentukan pemenang. Operasi ini tidak
+              bisa dikembalikan.
+            </p>
+          </div>
+        </div>
+
+        <div className="modal-footer">
+          <form action={closeLink} method="POST">
+            <input
+              type="hidden"
+              name="_token"
+              value={document
+                .querySelector('meta[name="csrf_token"]')
+                .getAttribute("content")}
+            />
+            <input type="hidden" name="_method" value="PATCH" />
+            <button type="submit " className="btn btn-white">
+              MENGERTI
+            </button>
+          </form>
+          <button
+            type="button"
+            className="btn btn-link text-white ml-auto"
+            data-dismiss="modal"
+          >
+            Tutup dialog ini
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+const AuctionTable = ({ auctionId, closeLink }) => {
   const [lelang, setLelang] = useState();
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
@@ -127,18 +193,21 @@ const AuctionTable = ({ auctionId }) => {
     setLoading(false);
   };
 
-  useState(() => {
+  useEffect(() => {
     fetchLelang();
     window.Echo.channel(`lelang.${auctionId}`).listen("NewOffer", (e) => {
       setLelang(e);
-      window.alertify
-        .notify(`<div class="alert alert-default alert-dismissible fade show" role="alert">
-      <span class="alert-inner--icon"><i class="ni ni-bell-55"></i></span>
-      <span class="alert-inner--text"><strong>Tawaran Baru !</strong> Seseorang telah membuat penawaran baru !</span>
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      window.alertify.notify(
+        `<div className="alert alert-default alert-dismissible fade show" role="alert">
+      <span className="alert-inner--icon"><i className="ni ni-bell-55"></i></span>
+      <span className="alert-inner--text"><strong>Tawaran Baru !</strong> Seseorang telah membuat penawaran baru !</span>
+      <button type="button" className="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
       </button>
-  </div>`, 'warning', 1000);
+  </div>`,
+        "warning",
+        1000
+      );
     });
   }, []);
 
@@ -163,7 +232,29 @@ const AuctionTable = ({ auctionId }) => {
   return (
     <div className="card shadow">
       <div className="card-header border-0">
-        <h3 className="mb-0">Lelang {lelang?.barang.nama_barang}</h3>
+        <div className="row">
+          <div className="col-sm-6">
+            <h3 className="mb-0">Lelang {lelang?.barang.nama_barang}</h3>
+          </div>
+          {lelang?.status == "dibuka" && (
+            <>
+              <Modal closeLink={closeLink} />
+              <div className="col-sm-6 text-right">
+                <button
+                  className="btn btn-icon btn-secondary"
+                  type="button"
+                  data-toggle="modal"
+                  data-target="#modal-notification"
+                >
+                  <span className="btn-inner--icon">
+                    <i className="fas fa-gavel"></i>
+                  </span>
+                  <span className="btn-inner--text">Tutup</span>
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
       {!loading && lelang?.penawaran.length > 0 ? (
         <Table columns={columns} data={lelang?.penawaran} users={users} />
@@ -181,8 +272,12 @@ if (document.getElementById("auction-table")) {
     .getElementById("auction-table")
     .getAttribute("data-auction");
 
+  let closeLink = document
+    .getElementById("auction-table")
+    .getAttribute("data-close");
+
   ReactDOM.render(
-    <AuctionTable auctionId={auctionId} />,
+    <AuctionTable auctionId={auctionId} closeLink={closeLink} />,
     document.getElementById("auction-table")
   );
 }

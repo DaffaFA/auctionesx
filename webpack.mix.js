@@ -15,6 +15,4 @@ mix.js('resources/js/app.js', 'public/js')
     .react()
     .sass('resources/sass/app.scss', 'public/css');
 
-console.log(process.env.MIX_APP_URL);
-
 mix.browserSync('http://auctionesx.local');
