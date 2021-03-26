@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use DB;
+
 class HomeController extends Controller
 {
     /**
@@ -20,7 +23,22 @@ class HomeController extends Controller
      * @return \Illuminate\View\View
      */
     public function index()
-    {
-        return view('dashboard');
+    {   
+        $orders = DB::table('tb_lelang')->get()->groupBy(function ($data) {
+            return Carbon::parse($data->tgl_lelang)->format('M');
+        })->map(function ($val) {
+            return $val->count();
+        });
+
+        $sales = DB::table('tb_lelang')->get()->groupBy(function ($data) {
+            return Carbon::parse($data->tgl_lelang)->format('M');
+        })->map(function ($val) {
+            $mapped = $val->reduce(function ($prev, $current) {
+                return $prev?->harga_akhir + $current->harga_akhir;
+            });
+            return $mapped;
+        }); 
+
+        return view('dashboard', ['orders' => $orders], ['sales' => $sales]);
     }
 }

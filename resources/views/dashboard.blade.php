@@ -286,4 +286,164 @@
 @push('js')
     <script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.min.js"></script>
     <script src="{{ asset('argon') }}/vendor/chart.js/dist/Chart.extension.js"></script>
+    <script>
+        let orders = @json($orders);
+        let sales = @json($sales);
+
+        window.addEventListener('load', () => {
+
+            var SalesChart = (function () {
+
+                // Variables
+
+                var $chart = $('#chart-sales');
+
+
+                // Methods
+
+                function init($chart) {
+
+                    var salesChart = new Chart($chart, {
+                        type: 'line',
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    gridLines: {
+                                        color: Charts.colors.gray[900],
+                                        zeroLineColor: Charts.colors.gray[900]
+                                    },
+                                    ticks: {
+                                        callback: function (value) {
+                                            if (!(value % 10)) {
+                                                return 'Rp' + value;
+                                            }
+                                        }
+                                    }
+                                }]
+                            },
+                            tooltips: {
+                                callbacks: {
+                                    label: function (item, data) {
+                                        var label = data.datasets[item.datasetIndex]
+                                            .label || '';
+                                        var yLabel = item.yLabel;
+                                        var content = '';
+
+                                        if (data.datasets.length > 1) {
+                                            content +=
+                                                '<span class="popover-body-label mr-auto">' +
+                                                label + '</span>';
+                                        }
+
+                                        content += '<span class="popover-body-value">Rp. ' +
+                                            yLabel + '</span>';
+                                        return content;
+                                    }
+                                }
+                            }
+                        },
+                        data: {
+                            labels: Object.keys(sales),
+                            datasets: [{
+                                label: 'Performance',
+                                data: Object.values(sales)
+                            }]
+                        }
+                    });
+
+                    // Save to jQuery object
+
+                    $chart.data('chart', salesChart);
+
+                };
+
+
+                // Events
+
+                if ($chart.length) {
+                    init($chart);
+                }
+
+            })();
+
+
+
+
+            var OrdersChart = (function () {
+
+                //
+                // Variables
+                //
+
+                var $chart = $('#chart-orders');
+                var $ordersSelect = $('[name="ordersSelect"]');
+
+
+                //
+                // Methods
+                //
+
+                // Init chart
+                function initChart($chart) {
+
+                    // Create chart
+                    var ordersChart = new Chart($chart, {
+                        type: 'bar',
+                        options: {
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        callback: function (value) {
+                                            if (!(value % 10)) {
+                                                //return '$' + value + 'k'
+                                                return value
+                                            }
+                                        }
+                                    }
+                                }]
+                            },
+                            tooltips: {
+                                callbacks: {
+                                    label: function (item, data) {
+                                        var label = data.datasets[item.datasetIndex]
+                                            .label || '';
+                                        var yLabel = item.yLabel;
+                                        var content = '';
+
+                                        if (data.datasets.length > 1) {
+                                            content +=
+                                                '<span class="popover-body-label mr-auto">' +
+                                                label + '</span>';
+                                        }
+
+                                        content += '<span class="popover-body-value">' +
+                                            yLabel + '</span>';
+
+                                        return content;
+                                    }
+                                }
+                            }
+                        },
+                        data: {
+                            labels: Object.keys(orders),
+                            datasets: [{
+                                label: 'Sales',
+                                data: Object.values(orders)
+                            }]
+                        }
+                    });
+
+                    // Save to jQuery object
+                    $chart.data('chart', ordersChart);
+                }
+
+
+                // Init chart
+                if ($chart.length) {
+                    initChart($chart);
+                }
+
+            })();
+        })
+    </script>
 @endpush

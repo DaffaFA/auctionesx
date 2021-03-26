@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 Route::post('/logout', 'admin\AuthController@logout')->name('logout');
 
-Route::group(['middleware' => 'guest:petugas', 'as' => 'admin::', 'prefix' => 'admin'], function () {
+Route::group(['middleware' => 'guest:petugas,masyarakat', 'as' => 'admin::', 'prefix' => 'admin'], function () {
 	Route::get('/login', 'admin\AuthController@loginView')->name('login');
 	Route::post('/login', 'admin\AuthController@login')->name('login');
 });
